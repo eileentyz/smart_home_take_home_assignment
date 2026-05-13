@@ -101,7 +101,7 @@ ROS 2 Node  ──── MQTT publish (ON/OFF) ────►  Mosquitto Broker
 ## 4. Project Structure
 
 ```text
-ros2_ws/
+smart_home_take_home_assignment/
 └── src/
     └── smart_lighting_controller/
         ├── package.xml
@@ -218,7 +218,7 @@ Zigbee2MQTT runs as a Docker container in the background.
 ## 10. Building the ROS 2 Package
  
 ```bash
-cd ~/ros2_ws
+cd ~/smart_home_take_home_assignment
 colcon build --symlink-install
 source install/setup.bash
 ```
@@ -232,7 +232,7 @@ source install/setup.bash
 Source ROS 2 and the workspace, then run the node:
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ~/smart_home_take_home_assignment/install/setup.bash
 ros2 run smart_lighting_controller lighting_controller
 ```
  
@@ -265,7 +265,7 @@ mosquitto_sub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff
 **Terminal B — watch ROS 2 topic:**
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ~/smart_home_take_home_assignment/install/setup.bash
 ros2 topic echo /light_state
 ```
  
@@ -299,7 +299,7 @@ mosquitto_sub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff
 **Terminal 2 — Echo the ROS 2 light state topic:**
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/ros2_ws/install/setup.bash
+source ~/smart_home_take_home_assignment/install/setup.bash
 ros2 topic echo /light_state
 ```
  
