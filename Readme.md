@@ -18,8 +18,7 @@ A ROS 2 (Jazzy) Python package that automates dorm room lighting to reduce elect
 10. [Building the ROS 2 Package](#10-building-the-ros-2-package)
 11. [Running the ROS 2 Node](#11-running-the-ros-2-node)
 12. [Testing ON/OFF Commands](#12-testing-onoff-commands)
-13. [Normal Run Procedure](#13-normal-run-procedure)
-14. [Future Enhancements](#14-future-enhancement)
+13. [Future Enhancements](#13-future-enhancement)
 
 ---
 
@@ -37,6 +36,48 @@ In student dormitories, lights are often left on overnight or during the day, wa
 
 ## 2. System Architecture
 
+The diagram below shows how the ROS 2 lighting controller communicates with the ZigBee smart plug through MQTT and Zigbee2MQTT.
+
+<img src="diagrams/system_archi.png" width="700">
+
+### Sequence Diagram
+
+The sequence diagram shows the flow when the lighting controller sends an ON/OFF command and receives the device state.
+
+<img src="diagrams/sequence_archi.png" width="700"> 
+
+### Component Overview
+ 
+| Component | Layer | Role |
+|---|---|---|
+| **Scheduler / Timer** | Software | Fires ON/OFF trigger at 8:00 PM / 8:00 AM |
+| **ROS 2 Node** | Software | Sends MQTT commands; subscribes to state; publishes `/light_state` |
+| **Mosquitto MQTT Broker** | Software | Relays messages between ROS 2 node and Zigbee2MQTT |
+| **Zigbee2MQTT** (Docker) | Software | Translates MQTT ↔ Zigbee protocol |
+| **SONOFF USB Dongle** | Hardware | Zigbee USB coordinator plugged into laptop |
+| **SONOFF Smart Plug** | Hardware | Receives Zigbee ON/OFF command wirelessly |
+| **Lamp** | Hardware | Connected to smart plug; physically turns on/off |
+ 
+### Data Flow
+ 
+```
+Scheduler (8 PM / 8 AM)
+    │  trigger
+    ▼
+ROS 2 Node  ──── MQTT publish (ON/OFF) ────►  Mosquitto Broker
+    ▲                                               │
+    │  MQTT subscribe (state JSON)                  │  MQTT bridge
+    └───────────────────────────────────────  Zigbee2MQTT (Docker)
+                                                    │
+                                               Zigbee (USB Dongle)
+                                                    │  wireless
+                                             SONOFF Smart Plug ──► 💡 Lamp
+```
+ 
+**Scheduled behaviour:**
+- **8:00 PM** → `ON` command → MQTT → Zigbee2MQTT → Smart plug → Lamp turns on
+- **8:00 AM** → `OFF` command → MQTT → Zigbee2MQTT → Smart plug → Lamp turns off
+- Smart plug reports state back → ROS 2 node publishes to `/light_state`
 ---
 
 ## 3. Technologies Used
@@ -67,6 +108,11 @@ ros2_ws/
         ├── smart_lighting_controller/
         │   ├── __init__.py
         │   └── lighting_controller.py
+        ├── diagrams/
+        │   ├── system_archi.drawio
+        │   ├── system_archi.png
+        │   ├── sequence_archi.uml
+        │   └── sequence_archi.png
         └── README.md
 ```
 ---
@@ -230,31 +276,7 @@ You should see the state update appear in both Terminal 1 and Terminal 2.
  
 ---
 
-## 13. Normal Run Procedure
- 
-A complete system requires three components running together:
- 
-**Step 1 — Start Mosquitto:**
-```bash
-sudo systemctl start mosquitto
-```
- 
-**Step 2 — Start Zigbee2MQTT:**
-```bash
-cd ~/zigbee2mqtt
-sudo docker compose up -d
-```
- 
-**Step 3 — Run the ROS 2 node:**
-```bash
-cd ~/ros2_ws
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-ros2 run smart_lighting_controller lighting_controller
-```
----
-
-## 14. Future Enhancements
+## 13. Future Enhancements
 
 1. **Configuration File**: Move settings to YAML/JSON config
 2. **Adjustable Schedules**: Use ROS 2 parameters or services to change times
