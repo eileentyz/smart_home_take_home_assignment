@@ -117,7 +117,12 @@ ros2_ws/
         │   ├── system_archi.png
         │   ├── sequence_archi.uml
         │   └── sequence_archi.png
-        └── README.md
+        ├── test/
+        │   ├── test_copyright.py
+        │   ├── test_flake8.py
+        │   └── test_pep257.py
+        ├── README.md
+        └── LICENSE
 ```
 ---
 
