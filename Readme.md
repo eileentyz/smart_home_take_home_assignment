@@ -39,7 +39,7 @@ In student dormitories, lights are often left on overnight or during the day, wa
 The diagram below shows how the ROS 2 lighting controller communicates with the ZigBee smart plug through MQTT and Zigbee2MQTT.
 
 <p align="center">
-  <img src="diagrams/system_archi.png" width="400">
+  <img src="src/diagrams/system_archi.png" width="400">
 </p>
 
 ### Sequence Diagram
@@ -47,7 +47,7 @@ The diagram below shows how the ROS 2 lighting controller communicates with the 
 The sequence diagram shows the flow when the lighting controller sends an ON/OFF command and receives the device state.
 
 <p align="center">
-  <img src="diagrams/sequence_archi.png" width="700">
+  <img src="src/diagrams/sequence_archi.png" width="700">
 </p>
 
 ### Component Overview
