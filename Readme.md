@@ -9,17 +9,19 @@ A ROS 2 (Jazzy) Python package that automates dorm room lighting to reduce elect
 1. [Overview](#1-overview)
 2. [System Architecture](#2-system-architecture)
 3. [Technologies Used](#3-technologies-used)
-4. [Topics Reference](#4-topics-reference)
-5. [Hardware Setup](#5-hardware-setup)
-6. [Install Dependencies](#6-install-dependencies)
-7. [Running the MQTT Broker](#7-running-the-mqtt-broker)
-8. [Running Zigbee2MQTT](#8-running-zigbee2mqtt)
-9. [Building the ROS 2 Package](#9-building-the-ros-2-package)
-10. [Running the ROS 2 Node](#10-running-the-ros-2-node)
-11. [Testing ON/OFF Commands](#11-testing-onoff-commands)
-12. [Normal Run Procedure](#12-normal-run-procedure)
+4. [Project Structure](#4-project-structure)
+5. [Topics Reference](#5-topics-reference)
+6. [Hardware Setup](#6-hardware-setup)
+7. [Install Dependencies](#7-install-dependencies)
+8. [Running the MQTT Broker](#8-running-the-mqtt-broker)
+9. [Running Zigbee2MQTT](#9-running-zigbee2mqtt)
+10. [Building the ROS 2 Package](#10-building-the-ros-2-package)
+11. [Running the ROS 2 Node](#11-running-the-ros-2-node)
+12. [Testing ON/OFF Commands](#12-testing-onoff-commands)
+13. [Normal Run Procedure](#13-normal-run-procedure)
+14. [Future Enhancements](#14-future-enhancement)
 
-—
+---
 
 ## 1. Overview
 
@@ -31,34 +33,10 @@ In student dormitories, lights are often left on overnight or during the day, wa
 - Receiving the current light state from MQTT
 - Publishing the current light state to a ROS 2 topic
 
-—
+---
 
 ## 2. System Architecture
 
-```
-┌─────────────────────────────────────────────────┐
-│          LightingController Node (ROS 2)         │
-├─────────────────────────────────────────────────┤
-│  • Scheduled ON/OFF commands (8 PM / 8 AM)      │
-│  • MQTT broker communication                    │
-│  • ROS 2 message publishing                     │
-│  • Duplicate command prevention                 │
-└──────────┬──────────────────────────┬───────────┘
-           │                          │
-           │ MQTT Subscribe/Publish   │ ROS 2 Publish
-           │                          │
-     ┌─────▼──────┐            ┌─────▼──────┐
-     │   MQTT     │            │ light_state│
-     │   Broker   │            │  Topic     │
-     └─────┬──────┘            └────────────┘
-           │
-           │ Zigbee2MQTT Bridge
-           │
-     ┌─────▼──────────────┐
-     │  Philips Hue Light │
-     │  (Zigbee Device)   │
-     └────────────────────┘
-```
 ---
 
 ## 3. Technologies Used
@@ -75,7 +53,25 @@ In student dormitories, lights are often left on overnight or during the day, wa
 
 ---
 
-## 4. Topics Reference
+## 4. Project Structure
+
+```text
+ros2_ws/
+└── src/
+    └── smart_lighting_controller/
+        ├── package.xml
+        ├── setup.py
+        ├── setup.cfg
+        ├── resource/
+        │   └── smart_lighting_controller
+        ├── smart_lighting_controller/
+        │   ├── __init__.py
+        │   └── lighting_controller.py
+        └── README.md
+```
+---
+
+## 5. Topics Reference
 
 ### MQTT Topics
 | Purpose | Topic | Message |
@@ -91,7 +87,7 @@ In student dormitories, lights are often left on overnight or during the day, wa
  
 ---
 
-## 5. Hardware Setup
+## 6. Hardware Setup
 
 **Required hardware:**
 - SONOFF Zigbee 3.0 USB Dongle Plus
@@ -110,7 +106,7 @@ In student dormitories, lights are often left on overnight or during the day, wa
 
 ---
 
-## 6. Install Dependencies
+## 7. Install Dependencies
 
 ```bash
 # Update package list
@@ -131,7 +127,7 @@ source /opt/ros/jazzy/setup.bash
  
 ---
 
-## 7. Running the MQTT Broker
+## 8. Running the MQTT Broker
  
 Start Mosquitto:
 ```bash
@@ -147,7 +143,7 @@ Mosquitto runs as a system service in the background and will persist across ter
  
 ---
 
-## 8. Running Zigbee2MQTT
+## 9. Running Zigbee2MQTT
  
 Navigate to the Zigbee2MQTT folder and start it via Docker:
 ```bash
@@ -164,7 +160,7 @@ Zigbee2MQTT runs as a Docker container in the background.
  
 ---
  
-## 9. Building the ROS 2 Package
+## 10. Building the ROS 2 Package
  
 ```bash
 cd ~/ros2_ws
@@ -176,7 +172,7 @@ source install/setup.bash
  
 ---
  
-## 10. Running the ROS 2 Node
+## 11. Running the ROS 2 Node
  
 Source ROS 2 and the workspace, then run the node:
 ```bash
@@ -192,7 +188,7 @@ Connected to MQTT broker with result code 0.
 ```
  
 ---
-## 11. Testing ON/OFF Commands
+## 12. Testing ON/OFF Commands
  
 Open three separate terminals to test the full communication chain.
  
@@ -234,7 +230,7 @@ You should see the state update appear in both Terminal 1 and Terminal 2.
  
 ---
 
-## 12. Normal Run Procedure
+## 13. Normal Run Procedure
  
 A complete system requires three components running together:
  
@@ -258,7 +254,7 @@ ros2 run smart_lighting_controller lighting_controller
 ```
 ---
 
-## Future Enhancements
+## 14. Future Enhancements
 
 1. **Configuration File**: Move settings to YAML/JSON config
 2. **Adjustable Schedules**: Use ROS 2 parameters or services to change times
