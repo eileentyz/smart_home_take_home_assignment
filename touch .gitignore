@@ -1,0 +1,27 @@
+# ROS 2 / colcon build files
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# VS Code
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# MQTT / Zigbee2MQTT runtime data
+data/
+*.db
+*.log
