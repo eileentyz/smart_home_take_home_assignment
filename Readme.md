@@ -321,13 +321,11 @@ mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff -m '{"state": "OFF"
 
 ## 13. Future Enhancements
 
-1. **Configuration File**: Move settings to YAML/JSON config
-2. **Adjustable Schedules**: Use ROS 2 parameters or services to change times
-3. **Manual Override**: Add ROS 2 service to manually control lights
-4. **Sunrise/Sunset Integration**: Use calendar data instead of fixed times
-5. **Sensor Integration**: React to presence sensors or light level
-6. **Testing Suite**: Add unit tests and integration tests
-7. **Docker Support**: Containerize for easier deployment
+1. **Sensor Integration**: Add motion or light sensors so the system can react based on room occupancy or brightness.
+2. **Manual Override**: Add a ROS 2 service or command to manually turn the light ON/OFF without waiting for the scheduled time.
+3. **Configurable Schedule**: Move the ON/OFF timing into a YAML or JSON configuration file instead of hardcoding 8:00 PM and 8:00 AM.
+4. **Testing Suite**: Add unit and integration tests to verify MQTT communication and ROS 2 topic publishing.
+5. **Docker Support**: Containerize the ROS 2 node for easier setup and deployment.
 
 ## License
 
