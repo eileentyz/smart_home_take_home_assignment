@@ -18,7 +18,7 @@ A ROS 2 (Jazzy) Python package that automates dorm room lighting to reduce elect
 10. [Building the ROS 2 Package](#10-building-the-ros-2-package)
 11. [Running the ROS 2 Node](#11-running-the-ros-2-node)
 12. [Testing ON/OFF Commands](#12-testing-onoff-commands)
-13. [Future Enhancements](#13-future-enhancement)
+13. [Future Enhancements](#13-future-enhancements)  
 
 ---
 
@@ -38,7 +38,7 @@ In student dormitories, lights are often left on overnight or during the day, wa
 
 The diagram below shows how the ROS 2 lighting controller communicates with the ZigBee smart plug through MQTT and Zigbee2MQTT.
 
-<img src="diagrams/system_archi.png" width="700">
+<img src="diagrams/system_archi.png" width="400">
 
 ### Sequence Diagram
 
@@ -236,43 +236,82 @@ Connected to MQTT broker with result code 0.
 ---
 ## 12. Testing ON/OFF Commands
  
-Open three separate terminals to test the full communication chain.
+### Full System (with hardware)
  
-### Terminal 1 — Subscribe to Zigbee2MQTT state topic
+A complete run requires all three components running together:
+ 
+| Step | Command |
+|---|---|
+| 1. Start Mosquitto | `sudo systemctl start mosquitto` |
+| 2. Start Zigbee2MQTT | `cd ~/zigbee2mqtt && sudo docker compose up -d` |
+| 3. Run ROS 2 node | `ros2 run smart_lighting_controller lighting_controller` |
+ 
+Then open two more terminals to observe:
+ 
+**Terminal A — watch raw Zigbee2MQTT state:**
 ```bash
 mosquitto_sub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff
 ```
-This shows raw state updates coming from the smart plug.
  
-### Terminal 2 — Echo the ROS 2 light state topic
+**Terminal B — watch ROS 2 topic:**
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/ros2_ws/install/setup.bash
 ros2 topic echo /light_state
 ```
  
-**Expected output:**
-```
-data: 'ON'
-```
-or
-```
-data: 'OFF'
-```
+The light will turn ON automatically at 8:00 PM and OFF at 8:00 AM.
  
-### Terminal 3 — Send a manual MQTT command
+---
  
-Turn the light **ON**:
+### Software-Only (no hardware)
+ 
+The system can also be tested without the physical Zigbee USB dongle or smart plug.
+In this mode, Zigbee2MQTT is not required because there is no real Zigbee device connected.
+
+This test checks:
+- Whether the ROS 2 node can connect to the MQTT broker
+- Whether MQTT state messages can be received by the ROS 2 node
+- Whether the ROS 2 node publishes the received state to `/light_state`
+
+**Step 1 — Start Mosquitto and run the ROS 2 node**  
+Follow Sections 8, 10, and 11. Skip Section 9 because Zigbee2MQTT requires the physical Zigbee USB dongle.
+ 
+> **What still works without hardware:**
+> The ROS 2 node will still fire the scheduled ON/OFF commands at 8:00 PM and 8:00 AM. You can see the `Sent MQTT command` log in the node terminal. However, because there is no smart plug to receive the command and report back, `/light_state` will not update automatically. Use Terminal 3 below to manually simulate the plug's state reply
+ 
+**Step 2 — Open 3 terminals:**
+ 
+**Terminal 1 — Subscribe to Zigbee2MQTT state topic:**
 ```bash
-mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff/set -m '{"state": "ON"}'
+mosquitto_sub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff
 ```
  
-Turn the light **OFF**:
+**Terminal 2 — Echo the ROS 2 light state topic:**
 ```bash
-mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff/set -m '{"state": "OFF"}'
+source /opt/ros/jazzy/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 topic echo /light_state
 ```
  
-You should see the state update appear in both Terminal 1 and Terminal 2.
+**Terminal 3 — Simulate a smart plug state update:**
+ 
+Simulate the plug reporting ON:
+```bash
+mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff -m '{"state": "ON"}'
+```
+ 
+Simulate the plug reporting OFF:
+```bash
+mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff -m '{"state": "OFF"}'
+```
+ 
+**Expected result:** Both Terminal 1 and Terminal 2 update immediately.
+ 
+> **Note:** This simulates the *state feedback* path (Zigbee2MQTT → ROS 2). To manually test the MQTT command topic, publish directly to the `/set` topic:
+> ```bash
+> mosquitto_pub -h localhost -t zigbee2mqtt/0xa4c1380fccb9ffff/set -m '{"state": "ON"}'
+> ```
  
 ---
 
