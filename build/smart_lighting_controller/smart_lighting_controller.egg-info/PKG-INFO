@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: smart-lighting-controller
-Version: 0.0.0
-Summary: Scheduled MQTT lighting controller for NTU dorm rooms
-Maintainer: eileen
-Maintainer-email: eileenteoh10399@gmail.com
-License: MIT
-Provides-Extra: test
