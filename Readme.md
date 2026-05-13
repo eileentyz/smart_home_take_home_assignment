@@ -102,6 +102,10 @@ ROS 2 Node  ──── MQTT publish (ON/OFF) ────►  Mosquitto Broker
 
 ```text
 smart_home_take_home_assignment/
+├── .gitignore
+├── docker-compose.yml
+├── README.md
+├── LICENSE
 └── src/
     └── smart_lighting_controller/
         ├── package.xml
@@ -117,12 +121,10 @@ smart_home_take_home_assignment/
         │   ├── system_archi.png
         │   ├── sequence_archi.uml
         │   └── sequence_archi.png
-        ├── test/
-        │   ├── test_copyright.py
-        │   ├── test_flake8.py
-        │   └── test_pep257.py
-        ├── README.md
-        └── LICENSE
+        └── test/
+            ├── test_copyright.py
+            ├── test_flake8.py
+            └── test_pep257.py
 ```
 ---
 
@@ -199,10 +201,11 @@ Mosquitto runs as a system service in the background and will persist across ter
 ---
 
 ## 9. Running Zigbee2MQTT
- 
-Navigate to the Zigbee2MQTT folder and start it via Docker:
+
+Before running Zigbee2MQTT, update the USB dongle path in `docker-compose.yml`.
+
 ```bash
-cd ~/zigbee2mqtt
+cd ~/smart_home_take_home_assignment
 sudo docker compose up -d
 ```
  
@@ -252,7 +255,7 @@ A complete run requires all three components running together:
 | Step | Command |
 |---|---|
 | 1. Start Mosquitto | `sudo systemctl start mosquitto` |
-| 2. Start Zigbee2MQTT | `cd ~/zigbee2mqtt && sudo docker compose up -d` |
+| 2. Start Zigbee2MQTT | `cd ~/smart_home_take_home_assignment && sudo docker compose up -d` |
 | 3. Run ROS 2 node | `ros2 run smart_lighting_controller lighting_controller` |
  
 Then open two more terminals to observe:
