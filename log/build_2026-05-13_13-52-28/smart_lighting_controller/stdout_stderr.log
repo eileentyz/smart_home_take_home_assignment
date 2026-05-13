@@ -1,0 +1,29 @@
+running develop
+Removing /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart-lighting-controller.egg-link (link to .)
+running egg_info
+writing ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/PKG-INFO
+writing dependency_links to ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/dependency_links.txt
+writing entry points to ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/entry_points.txt
+writing requirements to ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/requires.txt
+writing top-level names to ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/top_level.txt
+reading manifest file '../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/SOURCES.txt'
+writing manifest file '../../../build/smart_lighting_controller/smart_lighting_controller.egg-info/SOURCES.txt'
+running build
+running build_py
+copying smart_lighting_controller/__init__.py -> /home/eileen/ros2_ws/build/smart_lighting_controller/build/lib/smart_lighting_controller
+copying smart_lighting_controller/lighting_controller.py -> /home/eileen/ros2_ws/build/smart_lighting_controller/build/lib/smart_lighting_controller
+running install
+running install_lib
+creating /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller
+copying /home/eileen/ros2_ws/build/smart_lighting_controller/build/lib/smart_lighting_controller/__init__.py -> /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller
+copying /home/eileen/ros2_ws/build/smart_lighting_controller/build/lib/smart_lighting_controller/lighting_controller.py -> /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller
+byte-compiling /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller/lighting_controller.py to lighting_controller.cpython-312.pyc
+running install_data
+copying resource/smart_lighting_controller -> /home/eileen/ros2_ws/install/smart_lighting_controller/share/ament_index/resource_index/packages
+copying package.xml -> /home/eileen/ros2_ws/install/smart_lighting_controller/share/smart_lighting_controller
+running install_egg_info
+Copying ../../../build/smart_lighting_controller/smart_lighting_controller.egg-info to /home/eileen/ros2_ws/install/smart_lighting_controller/lib/python3.12/site-packages/smart_lighting_controller-0.0.0-py3.12.egg-info
+running install_scripts
+Installing lighting_controller script to /home/eileen/ros2_ws/install/smart_lighting_controller/lib/smart_lighting_controller
+writing list of installed files to '/home/eileen/ros2_ws/build/smart_lighting_controller/install.log'

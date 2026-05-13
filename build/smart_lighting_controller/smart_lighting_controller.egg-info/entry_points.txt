@@ -1,0 +1,2 @@
+[console_scripts]
+lighting_controller = smart_lighting_controller.lighting_controller:main
